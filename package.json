@@ -1,0 +1,46 @@
+{
+  "name": "crystal-eyes",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:8080",
+  "dependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.13.7",
+    "@types/react": "^16.8.14",
+    "@types/react-dom": "^16.8.4",
+    "body-parser": "^1.18.3",
+    "chalk": "^2.4.2",
+    "express": "^4.16.4",
+    "express-request-id": "^1.4.1",
+    "morgan": "^1.9.1",
+    "path": "^0.12.7",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "typescript": "^3.4.5"
+  },
+  "devDependencies": {
+    "react-scripts": "3.0.0"
+  },
+  "scripts": {
+    "start:dev": "react-scripts start",
+    "start:server": "node server/index.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
