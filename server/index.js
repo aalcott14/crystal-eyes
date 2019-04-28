@@ -19,12 +19,12 @@ app.use(morgan(`| ${chalk.green(':date[web]')} | ${chalk.green('#:id')} | ${chal
 
 // middlewares
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // routing
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get('/classifyCrystal', function (req, res) {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 
