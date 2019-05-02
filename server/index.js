@@ -3,7 +3,11 @@ const path = require('path');
 const bodyParser = require('body-parser')
 const addRequestId = require('express-request-id')({setHeader: false});
 const morgan = require('morgan');
-const chalk = require('chalk')
+const chalk = require('chalk');
+const multer = require('multer');
+const PNGReader = require('png.js');
+const FileReader = require('filereader');
+const predict = require ('./predict');
 
 const app = express();
 const port = 8080;
@@ -18,13 +22,31 @@ app.use(morgan(`| ${chalk.green(':date[web]')} | ${chalk.green('#:id')} | ${chal
 
 
 // middlewares
-app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, '/../public')));
+// app.use(bodyParser.json())
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
+const mult = multer();
 
 // routing
-app.get('/', function (req, res) {
-  res.sendFile(path.resolve(__dirname, '/../public', 'index.html'));
+app.post('/classify', mult.any(), function (req, res) {
+  const buffer = req.files[0].buffer;
+  const buffReader = new PNGReader(buffer);
+  buffReader.parse((err, png) => {
+    const obj = {
+      width: png.getWidth(),
+      height: png.getHeight(),
+      data: buffer
+    }
+    predict(obj).then((results) => {
+      res.send(results);
+    })
+  })
 });
 
 
