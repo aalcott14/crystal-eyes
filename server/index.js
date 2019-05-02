@@ -1,12 +1,9 @@
 const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser')
 const addRequestId = require('express-request-id')({setHeader: false});
 const morgan = require('morgan');
 const chalk = require('chalk');
 const multer = require('multer');
 const PNGReader = require('png.js');
-const FileReader = require('filereader');
 const predict = require ('./predict');
 
 const app = express();
@@ -39,8 +36,8 @@ app.post('/classify', mult.any(), function (req, res) {
   const buffReader = new PNGReader(buffer);
   buffReader.parse((err, png) => {
     const obj = {
-      width: png.getWidth(),
-      height: png.getHeight(),
+      width: 299,
+      height: 299,
       data: buffer
     }
     predict(obj).then((results) => {

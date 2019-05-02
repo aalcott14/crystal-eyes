@@ -15,7 +15,6 @@ import React from 'react';
 class App extends React.Component {
 
   handleImageUpload = (event: any) => {
-    console.log('event', event);
     const fd = new FormData();
     fd.append('image', event.target.files[0]);
     fetch('http://localhost:8080/classify', {
