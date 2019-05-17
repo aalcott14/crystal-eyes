@@ -32,18 +32,19 @@ const mult = multer();
 
 // routing
 app.post('/classify', mult.any(), function (req, res) {
-  const buffer = req.files[0].buffer;
-  const buffReader = new PNGReader(buffer);
-  buffReader.parse((err, png) => {
-    const obj = {
-      width: 299,
-      height: 299,
-      data: buffer
-    }
-    predict(obj).then((results) => {
-      res.send(results);
+  // const buffer = req.files[0].buffer;
+  // const buffReader = new PNGReader(buffer);
+  // buffReader.parse((err, png) => {
+  //   const obj = {
+  //     width: 299,
+  //     height: 299,
+  //     data: buffer
+  //   }
+    const theBuff = req.files[0].buffer;
+    predict(req.files[0].buffer).then((results) => {
+      res.send(theBuff);
     })
-  })
+  // })
 });
 
 

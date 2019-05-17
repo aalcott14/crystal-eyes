@@ -2,6 +2,7 @@ const tf = require('@tensorflow/tfjs')
 const { loadFrozenModel } = require('@tensorflow/tfjs-converter');
 const tfc = require('@tensorflow/tfjs-core');
 global.fetch = require('node-fetch');
+const canvas = require('canvas');
 require('@tensorflow/tfjs-node')
 
 const modelPath = './server/ts_files/tensorflowjs_model.pb';
@@ -36,8 +37,24 @@ const loadModel = async () => {
 
 module.exports = async (img) => {
   try {
-    const input = imageToInput(img, NUMBER_OF_CHANNELS)
+    // const input = imageToInput(img, NUMBER_OF_CHANNELS)
     const inception_model = await loadModel();
+    canvas.loadImage(img).then((canvasImage) => {
+      const can = canvas.createCanvas(299, 299);
+      const ctx = can.getContext('2d');
+      // const array = new Uint8ClampedArray(img);
+      ctx.drawImage(canvasImage, 0, 0, 299, 299);
+      console.log(can);
+      const tensor = tf.browser.fromPixels(can);
+      const etensor = tensor.expandDims(0);
+      const casted = tfc.cast(etensor, 'float32');
+      const predictionList = inception_model.predict(casted).dataSync();
+      console.log('classification results:', predictionList;
+  
+      return predictionList;
+    })
+
+    
     // const modifiedInput = {
     //   ...input,
     //   shape: [-1, ...input.shape],
@@ -47,20 +64,19 @@ module.exports = async (img) => {
     // const preprocessedInput = tfc.div(
     //   tfc.sub(input.asType('float32'), PREPROCESS_DIVISOR),
     //   PREPROCESS_DIVISOR);
-    const reshapedInput =
-        input.reshape([-1, ...input.shape]);
-    // const dict = {};
-    // dict[INPUT_NODE_NAME] = reshapedInput;
-    const predictions = inception_model.predict(reshapedInput).dataSync();
-    let predictionList = [];
-    for (let i = 0; i < predictions.length; i++) {
-      predictionList.push({value: predictions[i], index: i});
-    }
-    predictionList = predictionList.sort((a, b) => {
-      return b.value - a.value;
-    });
+    // const reshapedInput =
+    //     input.reshape([-1, ...input.shape]);
+    // // const dict = {};
+    // // dict[INPUT_NODE_NAME] = reshapedInput;
+    // const predictions = inception_model.predict(reshapedInput).dataSync();
+    // let predictionList = [];
+    // for (let i = 0; i < predictions.length; i++) {
+    //   predictionList.push({value: predictions[i], index: i});
+    // }
+    // predictionList = predictionList.sort((a, b) => {
+    //   return b.value - a.value;
+    // });
   
-    console.log('classification results:', predictionList)
   } catch(e) {
     console.log('ERROR', e);
   }
