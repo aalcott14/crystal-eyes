@@ -8,7 +8,7 @@ class App extends React.Component {
     fetch('http://localhost:8080/classify', {
       method: 'POST',
       body: fd
-    }).then((response) => response.text()).then((body) => console.log(body));
+    }).then((body) => console.log(body));
   }
 
   render() {

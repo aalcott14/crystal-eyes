@@ -33,7 +33,7 @@ const mult = multer();
 app.post('/classify', mult.any(), function (req, res) {
   const theBuff = req.files[0].buffer;
   predict(theBuff).then((results) => {
-    res.send(theBuff);
+    res.send(results);
   })
 });
 

@@ -31,7 +31,6 @@ const getTopKClasses = (logits, topK) => {
   }).slice(0, topK);
 
   const labels = fs.readFileSync(path.join(__dirname, './mobilenet/output_labels.txt')).toString().split('\n');
-  console.log('labels', labels);
 
   return predictionList.map(x => {
     return {label: labels[x.index], value: x.value};
@@ -46,10 +45,12 @@ module.exports = async (img) => {
       const ctx = can.getContext('2d');
       ctx.drawImage(canvasImage, 0, 0, 299, 299);
       const tensor = tf.browser.fromPixels(can);
-      const etensor = tensor.expandDims(0);
-      const casted = tfc.cast(etensor, 'float32');
-      const prediction = inception_model.predict(casted);
-      const predictionList = getTopKClasses(prediction, 3);
+      const casted = tfc.cast(tensor, 'float32');
+      const etensor = casted.expandDims(0);
+      const resized = tf.image.resizeBilinear(etensor, [299, 299]);
+      const normalized = tfc.div(tfc.sub(resized, [0]), [255]);
+      const prediction = inception_model.execute(normalized);
+      const predictionList = getTopKClasses(prediction, 6);
       console.log('classification results:', predictionList);
   
       return predictionList;
