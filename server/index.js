@@ -3,7 +3,6 @@ const addRequestId = require('express-request-id')({setHeader: false});
 const morgan = require('morgan');
 const chalk = require('chalk');
 const multer = require('multer');
-const PNGReader = require('png.js');
 const predict = require ('./predict');
 
 const app = express();
@@ -32,19 +31,10 @@ const mult = multer();
 
 // routing
 app.post('/classify', mult.any(), function (req, res) {
-  // const buffer = req.files[0].buffer;
-  // const buffReader = new PNGReader(buffer);
-  // buffReader.parse((err, png) => {
-  //   const obj = {
-  //     width: 299,
-  //     height: 299,
-  //     data: buffer
-  //   }
-    const theBuff = req.files[0].buffer;
-    predict(req.files[0].buffer).then((results) => {
-      res.send(theBuff);
-    })
-  // })
+  const theBuff = req.files[0].buffer;
+  predict(theBuff).then((results) => {
+    res.send(theBuff);
+  })
 });
 
 

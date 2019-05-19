@@ -1,17 +1,5 @@
 import React from 'react';
 
-// MUST BE PNG
-// const getBase64 = (file: any, cb: any) => {
-//   let reader: any = new FileReader();
-//   reader.onload = function () {
-//     cb(reader.result)
-//   };
-//   reader.onerror = function (error: any) {
-//       console.log('Error: ', error);
-//   };
-//   reader.readAsDataURL(file);
-// }
-
 class App extends React.Component {
 
   handleImageUpload = (event: any) => {
