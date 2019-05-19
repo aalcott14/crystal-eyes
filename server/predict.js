@@ -9,6 +9,10 @@ require('@tensorflow/tfjs-node')
 
 const modelPath = './server/mobilenet/tensorflowjs_model.pb';
 const weightsPath = './server/mobilenet/weights_manifest.json';
+const INPUT_WIDTH = 299;
+const INPUT_HEIGHT = 299;
+const INPUT_MEAN = 0;
+const INPUT_STD = 255;
 
 const loadModel = async () => {
   return await loadFrozenModel(`file://${modelPath}`, `file://${weightsPath}`);
@@ -41,14 +45,14 @@ module.exports = async (img) => {
   try {
     const inception_model = await loadModel();
     canvas.loadImage(img).then((canvasImage) => {
-      const can = canvas.createCanvas(299, 299);
+      const can = canvas.createCanvas(INPUT_WIDTH, INPUT_HEIGHT);
       const ctx = can.getContext('2d');
-      ctx.drawImage(canvasImage, 0, 0, 299, 299);
+      ctx.drawImage(canvasImage, 0, 0, INPUT_WIDTH, INPUT_HEIGHT);
       const tensor = tf.browser.fromPixels(can);
       const casted = tfc.cast(tensor, 'float32');
       const etensor = casted.expandDims(0);
-      const resized = tf.image.resizeBilinear(etensor, [299, 299]);
-      const normalized = tfc.div(tfc.sub(resized, [0]), [255]);
+      const resized = tf.image.resizeBilinear(etensor, [INPUT_WIDTH, INPUT_HEIGHT]);
+      const normalized = tfc.div(tfc.sub(resized, [INPUT_MEAN]), [INPUT_STD]);
       const prediction = inception_model.execute(normalized);
       const predictionList = getTopKClasses(prediction, 6);
       console.log('classification results:', predictionList);
