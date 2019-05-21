@@ -1,5 +1,3 @@
-import 'typeface-roboto';
-
 import React from 'react';
 import NavBar from '../NavBar';
 import ImageCapture from '../ImageCapture';

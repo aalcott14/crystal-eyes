@@ -8,7 +8,9 @@ class ImageCapture extends React.Component<IProps, {}> {
 
   render() {
     return (
-      <input className='mt-4' type="file" onChange={this.props.handleImageUpload} />
+      <div className="d-flex mt-4">
+        <input type="file" onChange={this.props.handleImageUpload} />
+      </div>
     )
   }
 }
