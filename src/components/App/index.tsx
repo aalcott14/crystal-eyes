@@ -2,12 +2,11 @@ import React from 'react';
 import NavBar from '../NavBar';
 import ImageCapture from '../ImageCapture';
 
-class App extends React.Component {
+class App extends React.PureComponent {
 
-
-  handleImageUpload = (event: any) => {
+  handleImageUpload = (img: File) => {
     const fd = new FormData();
-    fd.append('image', event.target.files[0]);
+    fd.append('image', img);
     fetch('http://localhost:8080/classify', {
       method: 'POST',
       body: fd

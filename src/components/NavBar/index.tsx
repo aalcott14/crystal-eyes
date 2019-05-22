@@ -19,9 +19,17 @@ const styles = {
   },
 };
 
-class NavBar extends React.Component<{ classes: any }, { anchorEl: any }> {
+interface IProps {
+  classes: Record<"root" | "grow", string>;
+}
 
-  state = {
+interface IState {
+  anchorEl: HTMLElement;
+}
+
+class NavBar extends React.Component<IProps, IState> {
+
+  state: IState = {
     anchorEl: null,
   };
 
@@ -41,7 +49,7 @@ class NavBar extends React.Component<{ classes: any }, { anchorEl: any }> {
       <div className={classes.root}>
         <AppBar color='default' position='static'>
           <Toolbar className='d-flex'>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+            <IconButton color="inherit" aria-label="Menu">
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" className={classes.grow}>
