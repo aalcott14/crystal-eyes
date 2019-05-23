@@ -24,49 +24,54 @@ interface IProps {
 }
 
 interface IState {
-  anchorEl: HTMLElement;
+  userAnchorEl: HTMLElement;
+  menuAnchorEl: HTMLElement
 }
 
 class NavBar extends React.Component<IProps, IState> {
 
   state: IState = {
-    anchorEl: null,
+    userAnchorEl: null,
+    menuAnchorEl: null
   };
 
-  handleMenu = (event: any) => {
-    this.setState({ anchorEl: event.currentTarget });
+  handleUserMenu = (event: any) => {
+    this.setState({ userAnchorEl: event.currentTarget });
   };
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
+  handleUserClose = () => {
+    this.setState({ userAnchorEl: null });
+  }
+
+  handleMenuMenu = (event: any) => {
+    this.setState({ menuAnchorEl: event.currentTarget });
+  };
+
+  handleMenuClose = () => {
+    this.setState({ menuAnchorEl: null });
   }
 
   render() {
     const { classes } = this.props;
-    const { anchorEl } = this.state; 
-    const open = Boolean(anchorEl);
+    const { userAnchorEl, menuAnchorEl } = this.state; 
+    const userOpen = Boolean(userAnchorEl);
+    const menuOpen = Boolean(menuAnchorEl);
     return (
       <div className={classes.root}>
         <AppBar color='default' position='static'>
           <Toolbar className='d-flex'>
-            <IconButton color="inherit" aria-label="Menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              Crystal ♦ Companion
-            </Typography>
             <div>
-              <IconButton
-                aria-owns={open ? 'menu-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleMenu}
+              <IconButton 
                 color="inherit"
+                aria-owns={menuOpen ? 'menu-appbar' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleMenuMenu}
               >
-                <AccountCircle />
+                <MenuIcon />
               </IconButton>
               <Menu
                 id="menu-appbar"
-                anchorEl={anchorEl}
+                anchorEl={menuAnchorEl}
                 anchorOrigin={{
                   vertical: 'top',
                   horizontal: 'right',
@@ -75,11 +80,41 @@ class NavBar extends React.Component<IProps, IState> {
                   vertical: 'top',
                   horizontal: 'right',
                 }}
-                open={open}
-                onClose={this.handleClose}
+                open={menuOpen}
+                onClose={this.handleMenuClose}
               >
-                <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                <MenuItem onClick={this.handleMenuClose}>Classify</MenuItem>
+                <MenuItem onClick={this.handleMenuClose}>Saved Crystals</MenuItem>
+              </Menu>
+            </div>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Crystal ♦ Companion
+            </Typography>
+            <div>
+              <IconButton
+                aria-owns={userOpen ? 'user-appbar' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleUserMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="user-appbar"
+                anchorEl={userAnchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={userOpen}
+                onClose={this.handleUserClose}
+              >
+                <MenuItem onClick={this.handleUserClose}>My account</MenuItem>
+                <MenuItem onClick={this.handleUserClose}>Logout</MenuItem>
               </Menu>
             </div>
           </Toolbar>
