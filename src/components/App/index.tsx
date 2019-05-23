@@ -1,15 +1,17 @@
 import React from 'react';
 import NavBar from '../NavBar';
 import ImageCapture from '../ImageCapture';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 
 interface IState {
   isAnalyzing: boolean;
-  prediction: string;
+  prediction: Prediction;
 }
 
 interface Prediction {
   label: string;
-  value: string;
+  value: number;
 }
 
 class App extends React.PureComponent<{}, IState> {
@@ -20,11 +22,15 @@ class App extends React.PureComponent<{}, IState> {
   }
 
   pickPrediction = (results: Prediction[]) => {
-    const prediction = results[0].label;
-    this.setState({ prediction });
+    const prediction = results[0];
+    this.setState({ 
+      prediction,
+      isAnalyzing: false
+    });
   }
 
   handleImageUpload = (img: File) => {
+    this.setState({ isAnalyzing: true })
     const fd = new FormData();
     fd.append('image', img);
     fetch('http://localhost:8080/classify', {
@@ -39,19 +45,32 @@ class App extends React.PureComponent<{}, IState> {
   render() {
     const { isAnalyzing, prediction } = this.state;
     return (
-      <React.Fragment>
+      <div className="d-flex flex-column">
         <NavBar />
         <ImageCapture 
           handleImageUpload={this.handleImageUpload}
           isAnalyzing={isAnalyzing}  
         />
-        {prediction && (
-          <div className="mt-4 d-flex">
+        {isAnalyzing ? (
+          <CircularProgress 
+            size="50%"
+            className="ml-auto mr-auto"
+            color="secondary"
+          />
+        ) : prediction && (
+          <div className="mt-4 d-flex flex-column justify-content-center">
+            <Typography 
+              variant="h6"
+              color="textSecondary"
+              className="ml-auto mr-auto"
+            >
+              Result:
+            </Typography>
             <h4 className="ml-auto mr-auto">
-              {prediction.toUpperCase()}
+              {`${prediction.label.toUpperCase()} (${(prediction.value * 100).toString().slice(0,2)}%)`}
             </h4>
         </div>)}
-      </React.Fragment>
+      </div>
     );
   }
 }

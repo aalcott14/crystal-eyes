@@ -60,13 +60,13 @@ class ImageCapture extends React.Component<IProps, IState> {
         </div>
         <input
           accept="image/png"
-          style={{display: 'none'}}
+          hidden
           type="file"
           onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.handleImageUpload(e.target.files[0])}
           id="fileButton"
         />
         <label htmlFor="fileButton" className="mt-2 ml-auto mr-auto text-align-center">
-          <Button>
+          <Button component="span">
               Upload 
           </Button>
         </label>
