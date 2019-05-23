@@ -18,7 +18,6 @@ app.use(morgan(`| ${chalk.green(':date[web]')} | ${chalk.green('#:id')} | ${chal
 
 
 // middlewares
-// app.use(bodyParser.json())
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -30,11 +29,9 @@ app.use(function (req, res, next) {
 const mult = multer();
 
 // routing
-app.post('/classify', mult.any(), function (req, res) {
+app.post('/classify', mult.any(), async (req, res) => {
   const theBuff = req.files[0].buffer;
-  predict(theBuff).then((results) => {
-    res.send(results);
-  })
+  predict(theBuff, res);
 });
 
 

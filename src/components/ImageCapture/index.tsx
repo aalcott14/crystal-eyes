@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from 'react';
 import Webcam from 'react-webcam';
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+
 
 const urltoFile = (url: string, filename: string, mimeType: string) => {
   return (fetch(url)
@@ -12,6 +14,7 @@ const urltoFile = (url: string, filename: string, mimeType: string) => {
 
 interface IProps {
   handleImageUpload: (img: File) => void;
+  isAnalyzing: boolean;
 }
 
 interface IState {
@@ -50,16 +53,23 @@ class ImageCapture extends React.Component<IProps, IState> {
           color="secondary"
           onClick={this.handleClick}
         >
-          Capture
+          <PhotoCamera />
         </Button>
         <div className="mt-2 ml-auto mr-auto">
           or
         </div>
-        <input 
-          className="mt-2 ml-auto mr-auto text-align-center"
-          type="file" 
+        <input
+          accept="image/png"
+          style={{display: 'none'}}
+          type="file"
           onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.handleImageUpload(e.target.files[0])}
+          id="fileButton"
         />
+        <label htmlFor="fileButton" className="mt-2 ml-auto mr-auto text-align-center">
+          <Button>
+              Upload 
+          </Button>
+        </label>
       </div>
     )
   }

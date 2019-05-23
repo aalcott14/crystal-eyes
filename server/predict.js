@@ -41,7 +41,7 @@ const getTopKClasses = (logits, topK) => {
   });
 }
 
-module.exports = async (img) => {
+module.exports = async (img, res) => {
   try {
     const inception_model = await loadModel();
     canvas.loadImage(img).then((canvasImage) => {
@@ -57,7 +57,7 @@ module.exports = async (img) => {
       const predictionList = getTopKClasses(prediction, 6);
       console.log('classification results:', predictionList);
   
-      return predictionList;
+      res.send(JSON.stringify(predictionList));
     })
   } catch(e) {
     console.log('ERROR', e);
