@@ -48,9 +48,8 @@ module.exports = async (img, res) => {
       const can = canvas.createCanvas(INPUT_WIDTH, INPUT_HEIGHT);
       const ctx = can.getContext('2d');
       ctx.drawImage(canvasImage, 0, 0, INPUT_WIDTH, INPUT_HEIGHT);
-      const tensor = tf.browser.fromPixels(can);
-      const casted = tfc.cast(tensor, 'float32');
-      const etensor = casted.expandDims(0);
+      const tensor = tf.browser.fromPixels(can, 3).toFloat();
+      const etensor = tensor.expandDims(0);
       const resized = tf.image.resizeBilinear(etensor, [INPUT_WIDTH, INPUT_HEIGHT]);
       const normalized = tfc.div(tfc.sub(resized, [INPUT_MEAN]), [INPUT_STD]);
       const prediction = inception_model.execute(normalized);
